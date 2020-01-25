@@ -3,6 +3,7 @@ package com.example.todolist
 import android.app.Activity
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,7 +12,7 @@ import com.example.todolist.database.Todo
 import kotlinx.android.synthetic.main.fragment_todo_list.view.*
 
 
-class TodoListFragment : Fragment() {
+class TodoListFragment : Fragment(){
 
     interface onTodoInterface {
         fun onCloseTodo()
@@ -42,29 +43,30 @@ class TodoListFragment : Fragment() {
         activity.setSupportActionBar(root.mainToolbar)
         setHasOptionsMenu(true)
 
-        val db = DatabaseHandler(context!!)
-
         root.listMain.layoutManager = LinearLayoutManager(context)
-        root.listMain.adapter = AdapterListTodo(context!!,db.allTodo)
-
         return root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        val db = DatabaseHandler(context!!)
+        sortInserting(db.allTodo)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_toolbar_main, menu)
     }
-    var typeSort = false
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId === R.id.action_sort) {
             val db = DatabaseHandler(context!!)
-            if(!typeSort) SortAscending(db.allTodo)
-            else SortDescending(db.allTodo)
+            if(checkSort) upendArray(db.allTodo)
+            else sortInserting(db.allTodo)
         }
         return true
     }
-
-    private fun SortAscending(array: ArrayList<Todo>) {
+    private var checkSort = false
+    private fun sortInserting(array: ArrayList<Todo>) {
         for (i in 1 until array.size) {
             val current = array[i]
             var j = i - 1
@@ -74,20 +76,16 @@ class TodoListFragment : Fragment() {
             }
             array[j + 1] = current
         }
-        typeSort = true
+        checkSort = true
         view!!.listMain.adapter = AdapterListTodo(context!!,array)
     }
-    private fun SortDescending(array: ArrayList<Todo>) {
-        for (i in 1 until array.size) {
-            val current = array[i]
-            var j = i - 1
-            while (j >= 0 && Data(current.getDate()).getDate() > Data(array[j].getDate()).getDate()) {
-                array[j + 1] = array[j]
-                j--
-            }
-            array[j + 1] = current
+    private fun upendArray(massive: ArrayList<Todo>) {
+        for (i in 0 until massive.size / 2) {
+            val tmp = massive[i]
+            massive[i] = massive[massive.size - i - 1]
+            massive[massive.size - i - 1] = tmp
         }
-        typeSort = false
-        view!!.listMain.adapter = AdapterListTodo(context!!,array)
+        checkSort = false
+        view!!.listMain.adapter = AdapterListTodo(context!!,massive)
     }
 }
