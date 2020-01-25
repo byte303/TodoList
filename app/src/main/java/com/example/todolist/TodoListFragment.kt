@@ -79,6 +79,7 @@ class TodoListFragment : Fragment(){
         checkSort = true
         view!!.listMain.adapter = AdapterListTodo(context!!,array)
     }
+
     private fun upendArray(massive: ArrayList<Todo>) {
         for (i in 0 until massive.size / 2) {
             val tmp = massive[i]
