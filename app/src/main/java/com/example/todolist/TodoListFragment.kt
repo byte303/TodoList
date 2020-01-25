@@ -65,6 +65,7 @@ class TodoListFragment : Fragment(){
         }
         return true
     }
+    
     private var checkSort = false
     private fun sortInserting(array: ArrayList<Todo>) {
         for (i in 1 until array.size) {
