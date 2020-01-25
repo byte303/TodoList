@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Список дел</string>
+    <string name="text_sort">Сортировать</string>
+    <string name="text_create_todo">Добавление задачи</string>
+    <string name="text_save">Сохранить</string>
+    <string name="text_title">Заголовок</string>
+    <string name="text_description">Описание</string>
+    <string name="text_error">Ошибка</string>
+    <string name="text_error_empty">Вы должны заполните все поля данными!</string>
+    <string name="text_close">Закрыть</string>
+    <string name="text_select_date">Выбор даты</string>
+</resources>
